@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "596180992719",
+    "project_id": "jobscan-8293e",
+    "storage_bucket": "jobscan-8293e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:596180992719:android:09142ca1af5d565514adba",
+        "android_client_info": {
+          "package_name": "com.example.jobscan"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADJDgcWizuyb_Fw2_ZgGERyjCdypMxN8U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
