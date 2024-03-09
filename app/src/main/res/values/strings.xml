@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">jobscan</string>
     <string name="welcome_to_jobscan">Welcome to Jobscan</string>
+    <string name="designation">Designation</string>
+    <string name="connection_status">Connection Status</string>
+    <string name="user_name">User Name</string>
 </resources>
