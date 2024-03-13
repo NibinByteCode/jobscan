@@ -30,10 +30,10 @@ class CandidateAdapter ( options: FirebaseRecyclerOptions<UserData>) :
         position: Int,
         model: UserData
     ) {
-        val storRef: StorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(model.profileImage)
-        Glide.with(holder.profileImage.context).load(storRef).into(holder.profileImage)
+//        val storRef: StorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(model.profileImage)
+        Glide.with(holder.profileImage.context).load(model.profileImage).into(holder.profileImage)
 
-        holder.userName.text = model.firstName + " " +model.lastName
+        holder.userName.text = model.firstName
         holder.designation.text = model.designation
         holder.connectionStatus.text = "Connect"
     }
