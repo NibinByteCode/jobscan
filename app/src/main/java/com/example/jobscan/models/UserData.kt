@@ -7,7 +7,8 @@ data class UserData(
     var userType: String = "",
     var firstName: String = "",
     var lastName: String = "",
-    var dateOfBirth: LocalDate = LocalDate.now(), // Using current date as default
+//    var dateOfBirth: LocalDate = LocalDate.now(), // Using current date as default
+    var dateOfBirth: String = "",
     var profileImage: String = "",
     var phoneNumber: String = "",
     var email: String = "",

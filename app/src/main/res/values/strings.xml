@@ -22,4 +22,6 @@
     <string name="search">Search</string>
     <string name="action_search">Search in Posts</string>
     <string name="search_in_posts">Search in Posts</string>
+    <string name="designation">Designation</string>
+    <string name="connection_status">Connection Status</string>
 </resources>
