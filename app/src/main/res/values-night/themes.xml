@@ -2,7 +2,8 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Jobscan" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="windowActionBar">true</item>
-        <item name="windowNoTitle">true</item>
-
+        <item name="windowNoTitle">false</item>
+        <item name="textColor">#ffffff</item>
+        <item name="backgroundColor">#000000</item>
     </style>
 </resources>

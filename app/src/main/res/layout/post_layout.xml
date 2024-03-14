@@ -27,18 +27,19 @@
         android:id="@+id/imageViewPostImage"
         android:layout_width="match_parent"
         android:layout_height="320dp"
+        android:src="@drawable/baseline_people_24"
         android:layout_below="@id/imageViewUserProfile"
         android:layout_marginTop="8dp"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:visibility="gone"/>
+        />
 
     <TextView
         android:id="@+id/textViewPostContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/post_content"
-        android:layout_below="@id/imageViewUserProfile"
+        android:layout_below="@id/imageViewPostImage"
         android:layout_marginTop="8dp"/>
 
 
