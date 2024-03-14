@@ -30,7 +30,7 @@
                     android:id="@+id/profileImage"
                     android:layout_width="wrap_content"
                     android:layout_height="100dp"
-                    android:src="@drawable/logo" />
+                    android:src="@drawable/logo_user" />
             </LinearLayout>
 
             <LinearLayout
