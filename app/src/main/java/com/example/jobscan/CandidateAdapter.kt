@@ -1,5 +1,7 @@
 package com.example.jobscan
 
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -12,7 +14,7 @@ import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 
-class CandidateAdapter ( options: FirebaseRecyclerOptions<UserData>) :
+class CandidateAdapter (private val context: Context, options: FirebaseRecyclerOptions<UserData>) :
     FirebaseRecyclerAdapter<UserData, CandidateAdapter.MyViewHolder>(options){
 
 
@@ -36,6 +38,15 @@ class CandidateAdapter ( options: FirebaseRecyclerOptions<UserData>) :
         holder.userName.text = model.firstName
         holder.designation.text = model.designation
         holder.connectionStatus.text = "Connect"
+
+        holder.itemView.setOnClickListener {
+//            val userId = getItem(position)?.userId
+//            userId?.let {
+                val intent = Intent(context, DetailActivity::class.java)
+                intent.putExtra("userId", model.userId)
+                context.startActivity(intent)
+//            }
+        }
     }
 
     class MyViewHolder (inflater: LayoutInflater, parent: ViewGroup)

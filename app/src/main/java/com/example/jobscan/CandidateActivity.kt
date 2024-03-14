@@ -16,7 +16,7 @@ class CandidateActivity : AppCompatActivity() {
 
         val query = FirebaseDatabase.getInstance().reference.child("Users")
         val options = FirebaseRecyclerOptions.Builder<UserData>().setQuery(query, UserData::class.java).build()
-        adapter = CandidateAdapter(options)
+        adapter = CandidateAdapter(this,options)
 
         val rView : RecyclerView = findViewById(R.id.rCandidateView)
         rView.layoutManager = LinearLayoutManager(this)
