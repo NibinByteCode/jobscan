@@ -52,6 +52,7 @@ dependencies {
     implementation("com.firebaseui:firebase-ui-database:8.0.0")
     implementation("com.firebaseui:firebase-ui-storage:8.0.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("androidx.activity:activity:1.8.0")
     //noinspection KaptUsageInsteadOfKsp
     kapt("com.github.bumptech.glide:compiler:4.16.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")

@@ -39,7 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/post_content"
-        android:layout_below="@id/imageViewUserProfile"
+        android:layout_below="@id/imageViewPostImage"
         android:layout_marginTop="8dp"/>
 
 
