@@ -7,10 +7,11 @@ import com.example.jobscan.models.UserData
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.database.FirebaseDatabase
 import androidx.appcompat.app.AppCompatActivity
+import com.example.jobscan.adapters.CandidateAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class CandidateActivity : AppCompatActivity() {
-    private var adapter :CandidateAdapter? = null
+    private var adapter : CandidateAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_candidate)

@@ -1,4 +1,4 @@
-package com.example.jobscan
+package com.example.jobscan.adapters
 
 import android.content.Context
 import android.content.Intent
@@ -8,11 +8,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.jobscan.DetailActivity
+import com.example.jobscan.R
 import com.example.jobscan.models.UserData
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 
 class CandidateAdapter (private val context: Context, options: FirebaseRecyclerOptions<UserData>) :
     FirebaseRecyclerAdapter<UserData, CandidateAdapter.MyViewHolder>(options){
@@ -21,14 +21,14 @@ class CandidateAdapter (private val context: Context, options: FirebaseRecyclerO
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): CandidateAdapter.MyViewHolder {
+    ): MyViewHolder {
         val inflater = LayoutInflater.from(parent.context)
 
         return MyViewHolder(inflater, parent)
     }
 
     override fun onBindViewHolder(
-        holder: CandidateAdapter.MyViewHolder,
+        holder: MyViewHolder,
         position: Int,
         model: UserData
     ) {
