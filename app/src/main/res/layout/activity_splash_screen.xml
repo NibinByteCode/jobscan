@@ -10,7 +10,8 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="833dp"
+        android:layout_height="match_parent"
         android:contentDescription="logo"
+        android:scaleType="fitXY"
         android:src="@drawable/logo" />
 </LinearLayout>
