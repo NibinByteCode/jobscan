@@ -18,6 +18,7 @@ class CandidateAdapter (private val context: Context, options: FirebaseRecyclerO
     FirebaseRecyclerAdapter<UserData, CandidateAdapter.MyViewHolder>(options){
 
 
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
