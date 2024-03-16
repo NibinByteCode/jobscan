@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_profile -> {
-                startActivity(Intent(this@MainActivity, DetailActivity::class.java).apply {
+                startActivity(Intent(this@MainActivity, ProfileActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 })
                 return@OnNavigationItemSelectedListener true

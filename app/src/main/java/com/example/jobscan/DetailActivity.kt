@@ -30,7 +30,9 @@ class DetailActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_profile -> {
-                // No need to start the same activity again
+                startActivity(Intent(this@DetailActivity, ProfileActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                })
                 return@OnNavigationItemSelectedListener true
             }
         }

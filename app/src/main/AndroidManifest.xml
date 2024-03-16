@@ -38,6 +38,9 @@
             android:name=".DetailActivity"
             android:exported="false" />
         <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".CandidateActivity"
             android:exported="false" />
         <activity
