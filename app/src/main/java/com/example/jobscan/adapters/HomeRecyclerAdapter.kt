@@ -2,6 +2,7 @@ package com.example.jobscan.adapters
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -22,8 +23,7 @@ import com.google.firebase.database.ValueEventListener
 class HomeRecyclerAdapter(options: FirebaseRecyclerOptions<PostData>) :
     FirebaseRecyclerAdapter<PostData, HomeRecyclerAdapter.MyViewHolder>(options) {
 
-    class MyViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
-        RecyclerView.ViewHolder(inflater.inflate(R.layout.post_layout, parent, false)) {
+    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val userprofileImage: ImageView = itemView.findViewById(R.id.imageViewUserProfile)
         val userName: TextView = itemView.findViewById(R.id.textViewUserName)
         val likeImage: ImageView = itemView.findViewById(R.id.imageViewLike)
@@ -37,7 +37,8 @@ class HomeRecyclerAdapter(options: FirebaseRecyclerOptions<PostData>) :
         viewType: Int
     ): MyViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return MyViewHolder(inflater, parent)
+        val itemView = inflater.inflate(R.layout.post_layout, parent, false)
+        return MyViewHolder(itemView)
     }
 
     override fun onBindViewHolder(

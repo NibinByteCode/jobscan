@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.jobscan.CandidateActivity
 import com.example.jobscan.DetailActivity
 import com.example.jobscan.adapters.HomeRecyclerAdapter
+import com.example.jobscan.helpers.BottomNavigationHandler
 import com.example.jobscan.models.PostData
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -21,7 +22,8 @@ import com.google.firebase.database.FirebaseDatabase
 
 class MainActivity : AppCompatActivity() {
     private var adapter: HomeRecyclerAdapter? = null
-
+    private lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var bottomNavigationHandler: BottomNavigationHandler
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -29,9 +31,12 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.apply {
             title = "Home"
         }
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
-        navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-
+        bottomNavigationView = findViewById(R.id.nav_view) // Correct initialization
+        bottomNavigationHandler = BottomNavigationHandler(this)
+        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+            bottomNavigationHandler.onNavigationItemSelected(item.itemId)
+        }
+        bottomNavigationHandler.selectBottomNavigationItem(bottomNavigationView, R.id.navigation_home)
         val rView: RecyclerView = findViewById(R.id.postRecycler)
         val searchView: SearchView = findViewById(R.id.searchView)
 
@@ -69,24 +74,5 @@ class MainActivity : AppCompatActivity() {
         adapter?.stopListening()
     }
 
-    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when (item.itemId) {
-            R.id.navigation_home -> {
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_connections -> {
-                startActivity(Intent(this@MainActivity, CandidateActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                })
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_profile -> {
-                startActivity(Intent(this@MainActivity, DetailActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                })
-                return@OnNavigationItemSelectedListener true
-            }
-        }
-        false
-    }
+
 }

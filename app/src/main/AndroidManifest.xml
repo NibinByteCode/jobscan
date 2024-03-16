@@ -14,12 +14,12 @@
         tools:ignore="ObsoleteSdkInt"
         tools:targetApi="31">
         <activity
-            android:name=".SignUpActivity"
+            android:name=".ProfileActivity"
             android:exported="false" />
         <activity
             android:name=".SplashScreenActivity"
-            android:theme="@style/AppTheme.Splash"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/AppTheme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,8 +27,11 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".SignUpActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".LoginActivity"
             android:exported="false" />
