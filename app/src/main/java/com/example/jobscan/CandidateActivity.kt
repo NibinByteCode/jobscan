@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jobscan.adapters.CandidateAdapter
+import com.example.jobscan.helpers.BottomNavigationHandler
 import com.example.jobscan.models.UserData
 import com.firebase.ui.database.FirebaseRecyclerOptions
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
@@ -14,6 +16,8 @@ class CandidateActivity : AppCompatActivity() {
     private var adapter: CandidateAdapter? = null
     private var query: Query? = null
     private var connectedUsersList: MutableList<String> = mutableListOf()
+    private lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var bottomNavigationHandler: BottomNavigationHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +25,12 @@ class CandidateActivity : AppCompatActivity() {
         supportActionBar?.apply {
             title = "Connections"
         }
+        bottomNavigationView = findViewById(R.id.nav_view) // Correct initialization
+        bottomNavigationHandler = BottomNavigationHandler(this)
+        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+            bottomNavigationHandler.onNavigationItemSelected(item.itemId)
+        }
+        bottomNavigationHandler.selectBottomNavigationItem(bottomNavigationView, R.id.navigation_connections)
 
         // Assuming you have initialized FirebaseAuth elsewhere in your app
         val currentUserID = FirebaseAuth.getInstance().currentUser?.uid ?: "4TwcxghIRwXHomxeHtlw30nUa2K2"
