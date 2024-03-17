@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:layout_margin="10dp"
+    android:elevation="5dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="8dp">
@@ -47,25 +54,26 @@
         android:layout_marginTop="8dp"/>
 
 
-    <ImageView
-        android:id="@+id/imageViewLike"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/outline_heart_plus_24"
-        android:layout_below="@id/textViewPostContent"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_alignParentEnd="true"/>
+<!--    <ImageView-->
+<!--        android:id="@+id/imageViewLike"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:src="@drawable/outline_heart_plus_24"-->
+<!--        android:layout_below="@id/textViewPostContent"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:layout_marginEnd="8dp"-->
+<!--        android:layout_alignParentEnd="true"/>-->
 
 
-    <ImageView
-        android:id="@+id/imageViewDislike"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/sharp_heart_minus_24"
-        android:layout_below="@id/textViewPostContent"
-        android:layout_marginTop="8dp"
-        android:layout_marginHorizontal="18dp"
-        android:layout_toStartOf="@id/imageViewLike"/>
+<!--    <ImageView-->
+<!--        android:id="@+id/imageViewDislike"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:src="@drawable/sharp_heart_minus_24"-->
+<!--        android:layout_below="@id/textViewPostContent"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:layout_marginHorizontal="18dp"-->
+<!--        android:layout_toStartOf="@id/imageViewLike"/>-->
 
 </RelativeLayout>
+</androidx.cardview.widget.CardView>

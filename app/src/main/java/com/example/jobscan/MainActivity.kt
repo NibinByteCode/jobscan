@@ -2,22 +2,21 @@ package com.example.jobscan
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.SearchView
 
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 
 
-import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.jobscan.CandidateActivity
-import com.example.jobscan.DetailActivity
 import com.example.jobscan.adapters.HomeRecyclerAdapter
 import com.example.jobscan.helpers.BottomNavigationHandler
 import com.example.jobscan.models.PostData
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.FirebaseDatabase
 
 class MainActivity : AppCompatActivity() {
@@ -61,7 +60,11 @@ class MainActivity : AppCompatActivity() {
         rView.layoutManager = LinearLayoutManager(this)
         rView.adapter = adapter
 
-
+        val createPostButton: FloatingActionButton = findViewById(R.id.addPost)
+        createPostButton.setOnClickListener {
+            val intent = Intent(this, CreatePost::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onStart() {

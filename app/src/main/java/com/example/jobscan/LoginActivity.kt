@@ -15,7 +15,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        supportActionBar?.hide()
         firebaseAuth= FirebaseAuth.getInstance()
         val text = findViewById<TextView>(R.id.textView2)
 
