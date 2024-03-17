@@ -24,4 +24,5 @@
     <string name="search_in_posts">Search in Posts</string>
     <string name="designation">Designation</string>
     <string name="connection_status">Connection Status</string>
+    <string name="Post_date">Post Creation Date</string>
 </resources>

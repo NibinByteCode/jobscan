@@ -39,7 +39,8 @@
         android:layout_marginHorizontal="5dp"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintTop_toBottomOf="@+id/searchCardView"
-        tools:layout_editor_absoluteX="5dp" />
+        tools:layout_editor_absoluteX="5dp"
+        app:reverseLayout="true"/>
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="match_parent"

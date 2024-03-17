@@ -20,6 +20,9 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class HomeRecyclerAdapter(options: FirebaseRecyclerOptions<PostData>) :
     FirebaseRecyclerAdapter<PostData, HomeRecyclerAdapter.MyViewHolder>(options) {
@@ -29,6 +32,7 @@ class HomeRecyclerAdapter(options: FirebaseRecyclerOptions<PostData>) :
         val userName: TextView = itemView.findViewById(R.id.textViewUserName)
         val postImage: ImageView = itemView.findViewById(R.id.imageViewPostImage)
         val postContent: TextView = itemView.findViewById(R.id.textViewPostContent)
+        val postDate: TextView = itemView.findViewById(R.id.textViewPostdate)
     }
 
     override fun onCreateViewHolder(
@@ -62,6 +66,7 @@ override fun onBindViewHolder(
                     .into(holder.userprofileImage)
             }.addOnFailureListener { exception ->
                 Log.e("Glide", "Failed to generate download URL: ${exception.message}")
+
             }
 
             holder.userName.text = "${userDetail.firstName} ${userDetail.lastName}"
@@ -70,11 +75,20 @@ override fun onBindViewHolder(
         }
     }
 
-    Glide.with(holder.postImage.context)
-        .load(model.postImage)
-        .error(R.drawable.logo_user) // Set error placeholder image
-        .into(holder.postImage)
+    if (model.postImage == null) {
+        holder.postImage.visibility = View.GONE // or View.INVISIBLE
+    } else {
+        Glide.with(holder.postImage.context)
+            .load(model.postImage)
+            .error(R.drawable.logo_user) // Set error placeholder image
+            .into(holder.postImage)
+    }
     holder.postContent.text = model.postContent
+    val timestamp = model.postDate // Your timestamp
+    val date = Date(timestamp)
+    val dateFormat = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault())
+    val formattedDate = dateFormat.format(date)
+   holder.postDate.text= formattedDate
 }
 
 
@@ -88,10 +102,8 @@ override fun onBindViewHolder(
                 println("User Data Retrieved: $postUserData")
                 callback(postUserData)
             }
-
             override fun onCancelled(databaseError: DatabaseError) {
-                // Handle errors
-                println("Database Error: ${databaseError.message}")
+                                println("Database Error: ${databaseError.message}")
             }
         })
     }

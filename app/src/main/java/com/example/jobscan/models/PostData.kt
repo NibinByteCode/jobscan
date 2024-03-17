@@ -5,8 +5,7 @@ data class PostData(
     var postContent: String = "",
     var postImage: String? = null,
     var userId: String = "",
-    var likeCount: Int = 0,
-    var dislikeCount: Int = 0
+    var postDate: Long=0,
 ){
     fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -14,8 +13,7 @@ data class PostData(
             "postContent" to postContent,
             "postImage" to postImage,
             "userId" to userId,
-            "likeCount" to likeCount,
-            "dislikeCount" to dislikeCount
+            "postDate" to postDate,
         )
     }
 }

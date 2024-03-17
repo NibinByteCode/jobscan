@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.SearchView
+import android.widget.Toast
 
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +18,10 @@ import com.example.jobscan.models.PostData
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class MainActivity : AppCompatActivity() {
     private var adapter: HomeRecyclerAdapter? = null
@@ -46,7 +50,12 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                Log.i("test", "Search done")
+                val firebaseQuery = FirebaseDatabase.getInstance().reference.child("Posts")
+                    .orderByChild("postContent").startAt(newText).endAt("$newText\uf8ff")
+                val options = FirebaseRecyclerOptions.Builder<PostData>()
+                    .setQuery(firebaseQuery, PostData::class.java)
+                    .build()
+                adapter?.updateOptions(options)
                 return true
             }
 
@@ -57,14 +66,12 @@ class MainActivity : AppCompatActivity() {
             .build()
         Log.i("data","getting data")
         adapter = HomeRecyclerAdapter(options)
-        rView.layoutManager = LinearLayoutManager(this)
+        val mmLinearLayoutManager:LinearLayoutManager= LinearLayoutManager(this)
+        mmLinearLayoutManager.reverseLayout=true
+        mmLinearLayoutManager.setStackFromEnd(true)
+        rView.layoutManager = mmLinearLayoutManager
         rView.adapter = adapter
 
-        val createPostButton: FloatingActionButton = findViewById(R.id.addPost)
-        createPostButton.setOnClickListener {
-            val intent = Intent(this, CreatePost::class.java)
-            startActivity(intent)
-        }
     }
 
     override fun onStart() {
