@@ -54,4 +54,5 @@
         app:layout_constraintHorizontal_bias="0.928"
         app:layout_constraintStart_toStartOf="@+id/postContent"
         app:layout_constraintTop_toBottomOf="@+id/postContent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

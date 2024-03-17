@@ -8,4 +8,14 @@ data class PostData(
     var likeCount: Int = 0,
     var dislikeCount: Int = 0
 ){
+    fun toMap(): Map<String, Any?> {
+        return mapOf(
+            "postId" to postId,
+            "postContent" to postContent,
+            "postImage" to postImage,
+            "userId" to userId,
+            "likeCount" to likeCount,
+            "dislikeCount" to dislikeCount
+        )
+    }
 }

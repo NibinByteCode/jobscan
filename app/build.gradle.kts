@@ -54,6 +54,7 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.11.0")
     implementation("androidx.activity:activity:1.8.0")
     implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
+    implementation("com.google.firebase:firebase-firestore-ktx:24.10.3")
     kapt("com.github.bumptech.glide:compiler:4.11.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
