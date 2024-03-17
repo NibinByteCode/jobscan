@@ -27,12 +27,12 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         auth = FirebaseAuth.getInstance()
-        database = FirebaseDatabase.getInstance().reference.child("users")
+        database = FirebaseDatabase.getInstance().reference.child("Users")
 
         val currentUser: FirebaseUser? = auth.currentUser
         currentUser?.uid?.let { userId ->
-            val tempUserid = "0cPYokz5OAdEWGcGgrb2oikLtvp1"
-            database.child(tempUserid).addListenerForSingleValueEvent(object : ValueEventListener {
+//            val tempUserid = "0cPYokz5OAdEWGcGgrb2oikLtvp1"
+            database.child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
                         val firstName = snapshot.child("firstName").getValue(String::class.java)

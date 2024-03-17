@@ -26,6 +26,12 @@ class DetailActivity : AppCompatActivity() {
         supportActionBar?.apply {
             title = "Profile"
         }
+        bottomNavigationView = findViewById(R.id.nav_view) // Correct initialization
+        bottomNavigationHandler = BottomNavigationHandler(this)
+        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+            bottomNavigationHandler.onNavigationItemSelected(item.itemId)
+        }
+//        bottomNavigationHandler.selectBottomNavigationItem(bottomNavigationView, R.id.navigation_home)
 
         val userNameTextView = findViewById<TextView>(R.id.userName)
         val userIdTextView = findViewById<TextView>(R.id.userId)
@@ -36,7 +42,7 @@ class DetailActivity : AppCompatActivity() {
         val userDesignationTextView = findViewById<TextView>(R.id.userDesignation)
 
 
-        userId = intent.getStringExtra("userid") ?: ""
+        userId = intent.getStringExtra("userId") ?: ""
         databaseRef = FirebaseDatabase.getInstance().reference.child("Users").child(userId)
 
         databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
