@@ -64,7 +64,8 @@ class CandidateAdapter (private val context: Context, options: FirebaseRecyclerO
         }
 
 
-        holder.userName.text = model.firstName
+        holder.userName.text = model.firstName + " "+ model.lastName
+        holder.userType.text = model.userType
         holder.designation.text = model.designation
 
         // Check if the displayed user ID is in the connections of the current user
@@ -81,6 +82,7 @@ class CandidateAdapter (private val context: Context, options: FirebaseRecyclerO
     class MyViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
         RecyclerView.ViewHolder(inflater.inflate(R.layout.activity_candidate_row, parent, false)) {
         val userName: TextView = itemView.findViewById(R.id.user_name)
+        val userType: TextView = itemView.findViewById(R.id.user_type)
         val designation: TextView = itemView.findViewById(R.id.designation)
         val connectionStatus: TextView = itemView.findViewById(R.id.connection_status)
         val profileImage: ImageView = itemView.findViewById(R.id.profileImage)
