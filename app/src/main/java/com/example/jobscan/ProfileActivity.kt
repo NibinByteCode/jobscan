@@ -1,14 +1,10 @@
 package com.example.jobscan
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.widget.Button
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.jobscan.helpers.BottomNavigationHandler
-import com.example.jobscan.models.UserData
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -19,43 +15,37 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class ProfileActivity : AppCompatActivity() {
+
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
-    private lateinit var bottomNavigationView: BottomNavigationView
-    private lateinit var bottomNavigationHandler: BottomNavigationHandler
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
         supportActionBar?.apply {
             title = "Profile"
         }
-        bottomNavigationView = findViewById(R.id.nav_view)
-        bottomNavigationHandler = BottomNavigationHandler(this)
-        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
-            bottomNavigationHandler.onNavigationItemSelected(item.itemId)
-        }
-        bottomNavigationHandler.selectBottomNavigationItem(
-            bottomNavigationView,
-            R.id.navigation_profile
-        )
+
         auth = FirebaseAuth.getInstance()
-        database = FirebaseDatabase.getInstance().reference.child("Users")
+        database = FirebaseDatabase.getInstance().reference.child("users")
+
         val currentUser: FirebaseUser? = auth.currentUser
         currentUser?.uid?.let { userId ->
-            val tempUserid ="0cPYokz5OAdEWGcGgrb2oikLtvp1"
+            val tempUserid = "0cPYokz5OAdEWGcGgrb2oikLtvp1"
             database.child(tempUserid).addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
-                        val userData = snapshot.getValue(UserData::class.java)
-                        userData ?.firstName?.let { Log.i("User Data", it) }
-                        userData?.let { user ->
-                            findViewById<TextView>(R.id.userName).text = "${user.firstName} ${user.lastName}"
-                            findViewById<TextView>(R.id.userEmail).text = user.email
-                            findViewById<TextView>(R.id.userContact).text = user.phoneNumber
+                        val firstName = snapshot.child("firstName").getValue(String::class.java)
+                        val lastName = snapshot.child("lastName").getValue(String::class.java)
+                        val userEmail = snapshot.child("userEmail").getValue(String::class.java)
+                        val userContact = snapshot.child("userContact").getValue(String::class.java)
+                        val userImg = snapshot.child("userImg").getValue(String::class.java)
+                        val userCompany = snapshot.child("userCompany").getValue(String::class.java)
 
-                            // Set other UI elements if needed
-                        }
 
+                        findViewById<TextView>(R.id.userName).text = "$firstName $lastName"
+                        findViewById<TextView>(R.id.userEmail).text = userEmail
+                        findViewById<TextView>(R.id.userContact).text = userContact
                     }
                 }
 
@@ -66,5 +56,49 @@ class ProfileActivity : AppCompatActivity() {
         }
 
 
+        val navView: BottomNavigationView = findViewById(R.id.nav_view)
+        navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+
+        val logoutBtn: Button = findViewById(R.id.logoutBtn)
+        logoutBtn.setOnClickListener {
+            auth.signOut()
+            startActivity(Intent(this@ProfileActivity, LoginActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            })
+
+
+        }
     }
-}
+
+    private val mOnNavigationItemSelectedListener =
+        BottomNavigationView.OnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> {
+                    startActivity(Intent(this@ProfileActivity, MainActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    })
+                    return@OnNavigationItemSelectedListener true
+                }
+
+                R.id.navigation_connections -> {
+                    startActivity(
+                        Intent(
+                            this@ProfileActivity,
+                            CandidateActivity::class.java
+                        ).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        })
+                    return@OnNavigationItemSelectedListener true
+                }
+
+                R.id.navigation_profile -> {
+                    startActivity(Intent(this@ProfileActivity, ProfileActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    })
+                    return@OnNavigationItemSelectedListener true
+                }
+            }
+            false
+        }}
+
+
