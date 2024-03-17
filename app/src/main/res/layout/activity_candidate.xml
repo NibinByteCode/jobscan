@@ -7,6 +7,14 @@
     android:orientation="vertical"
     >
 
+    <SearchView
+        android:id="@+id/candidate_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:iconifiedByDefault="false"
+        android:queryHint="Search Candidates" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rCandidateView"
         android:layout_width="match_parent"
@@ -20,4 +28,5 @@
         android:layout_gravity="bottom"
         android:background="?android:attr/windowBackground"
         app:menu="@menu/bottom_nav_menu" />
+
 </LinearLayout>
