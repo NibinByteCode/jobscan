@@ -3,6 +3,8 @@ package com.example.jobscan
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import com.example.jobscan.databinding.ActivitySignUpBinding
 import androidx.appcompat.app.AppCompatActivity
@@ -15,10 +17,15 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val text = findViewById<TextView>(R.id.textView2)
         firebaseAuth = FirebaseAuth.getInstance()
-
+        text.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
         binding.button.setOnClickListener {
             Log.d("msg", "Clicked")
             val email = binding.userEmail.text.toString()
@@ -27,10 +34,9 @@ class SignUpActivity : AppCompatActivity() {
             val firstName = binding.firstName.text.toString()
             val lastName = binding.lastname.text.toString()
             val phoneNumber = binding.phoneNumber.text.toString()
-
             val userType = "user"
 
-            if (email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty()) {
+            if (email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty() && firstName.isNotEmpty() && lastName.isNotEmpty() && phoneNumber.isNotEmpty()) {
                 if (password == confirmPassword) {
                     firebaseAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener {

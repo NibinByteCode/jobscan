@@ -3,6 +3,7 @@ package com.example.jobscan
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.example.jobscan.databinding.ActivityLoginBinding
@@ -14,10 +15,19 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         firebaseAuth= FirebaseAuth.getInstance()
+        val text = findViewById<TextView>(R.id.textView2)
+
+        text.setOnClickListener {
+            val intent = Intent(this, SignUpActivity::class.java)
+            startActivity(intent)
+        }
+
+
         binding.button2.setOnClickListener {
-            val email = binding.editTextText4.text.toString()
-            val password = binding.editTextText5.text.toString()
+            val email = binding.userEmail.text.toString()
+            val password = binding.password.text.toString()
 
 
             if (email.isNotEmpty() && password.isNotEmpty()) {
