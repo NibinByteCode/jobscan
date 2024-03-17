@@ -55,8 +55,14 @@ class CandidateAdapter (private val context: Context, options: FirebaseRecyclerO
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int, model: UserData) {
-        val storRef: StorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(model.profileImage)
-        Glide.with(holder.profileImage.context).load(storRef).into(holder.profileImage)
+        if (model.profileImage.isNotEmpty()) {
+            val storRef: StorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(model.profileImage)
+            Glide.with(holder.profileImage.context).load(storRef).into(holder.profileImage)
+        } else {
+            // Set a placeholder image or handle the empty case as needed
+            holder.profileImage.setImageResource(R.drawable.logo_user)
+        }
+
 
         holder.userName.text = model.firstName
         holder.designation.text = model.designation
