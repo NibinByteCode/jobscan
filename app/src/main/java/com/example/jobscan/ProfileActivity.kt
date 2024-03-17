@@ -2,9 +2,11 @@ package com.example.jobscan
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -13,6 +15,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -37,15 +41,36 @@ class ProfileActivity : AppCompatActivity() {
                     if (snapshot.exists()) {
                         val firstName = snapshot.child("firstName").getValue(String::class.java)
                         val lastName = snapshot.child("lastName").getValue(String::class.java)
-                        val userEmail = snapshot.child("userEmail").getValue(String::class.java)
-                        val userContact = snapshot.child("userContact").getValue(String::class.java)
-                        val userImg = snapshot.child("userImg").getValue(String::class.java)
-                        val userCompany = snapshot.child("userCompany").getValue(String::class.java)
+                        val userEmail = snapshot.child("email").getValue(String::class.java)
+                        val userContact = snapshot.child("phoneNumber").getValue(String::class.java)
+                        val userImg = snapshot.child("profileImage").getValue(String::class.java)
+                        val userCompany = snapshot.child("companyName").getValue(String::class.java)
+                        val educationQualification = snapshot.child("educationQualification").getValue(String::class.java)
+                        val designation = snapshot.child("designation").getValue(String::class.java)
+                        val userType = snapshot.child("userType").getValue(String::class.java)
+                        val connectionCount = snapshot.child("connectionCount").getValue(Int::class.java)
+                        val dob = snapshot.child("dateOfBirth").getValue(String::class.java)
 
 
-                        findViewById<TextView>(R.id.userName).text = "$firstName $lastName"
-                        findViewById<TextView>(R.id.userEmail).text = userEmail
-                        findViewById<TextView>(R.id.userContact).text = userContact
+//                        findViewById<TextView>(R.id.userName).text = "$firstName $lastName"
+//                        findViewById<TextView>(R.id.userEmail).text = userEmail
+//                        findViewById<TextView>(R.id.userContact).text = userContact
+                        findViewById<TextView>(R.id.pr_user_name).text = "$firstName $lastName"
+                        findViewById<TextView>(R.id.pr_email).text = userEmail
+                        findViewById<TextView>(R.id.cand_phone_number).text = userContact
+                        findViewById<TextView>(R.id.pr_designation).text = designation
+                        findViewById<TextView>(R.id.pr_company).text = userCompany
+                        findViewById<TextView>(R.id.cand_connection_count).text = connectionCount.toString() + " Connections"
+                        findViewById<TextView>(R.id.pr_dob).text = dob
+                        findViewById<TextView>(R.id.pr_education_qualification).text = educationQualification
+                        findViewById<TextView>(R.id.pr_user_type).text = userType
+                        if (!userImg.isNullOrEmpty()) {
+                            Log.i("test", "UserImage value $userImg")
+                            val storageReference: StorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(userImg)
+                            Glide.with(this@ProfileActivity)
+                                .load(storageReference)
+                                .into(findViewById(R.id.pr_profile_image))
+                        }
                     }
                 }
 
