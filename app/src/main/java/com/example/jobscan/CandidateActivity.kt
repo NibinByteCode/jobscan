@@ -1,101 +1,101 @@
 package com.example.jobscan
-import android.content.Intent
+
 import android.os.Bundle
-import android.util.Log
-import android.widget.SearchView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.jobscan.adapters.CandidateAdapter
 import com.example.jobscan.models.UserData
 import com.firebase.ui.database.FirebaseRecyclerOptions
-import com.google.firebase.database.FirebaseDatabase
-import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.database.Query
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 
 class CandidateActivity : AppCompatActivity() {
-    private var adapter :CandidateAdapter? = null
+    private var adapter: CandidateAdapter? = null
     private var query: Query? = null
+    private var connectedUsersList: MutableList<String> = mutableListOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_candidate)
         supportActionBar?.apply {
             title = "Connections"
         }
+
+        // Assuming you have initialized FirebaseAuth elsewhere in your app
+        val currentUserID = FirebaseAuth.getInstance().currentUser?.uid ?: "4TwcxghIRwXHomxeHtlw30nUa2K2"
+
+
         query = FirebaseDatabase.getInstance().reference.child("Users")
         val options = FirebaseRecyclerOptions.Builder<UserData>()
             .setQuery(query!!, UserData::class.java)
             .build()
-        adapter = CandidateAdapter(this,options)
+        adapter = CandidateAdapter(this, options)
 
-        val rView : RecyclerView = findViewById(R.id.rCandidateView)
+        val rView: RecyclerView = findViewById(R.id.rCandidateView)
         rView.layoutManager = LinearLayoutManager(this)
         rView.adapter = adapter
 
-        val searchView: SearchView = findViewById(R.id.candidate_search)
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                if (query != null) {
-                    Log.i("test", "Search done onsubmit $query")
-                    searchCandidates(query)
-                }
-                return true
-            }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText != null) {
-                    Log.i("test", "Search done onchange $newText")
-                    searchCandidates(newText)
-                }
-                return true
-            }
-        })
-    }
-
-    private fun searchCandidates(queryText: String) {
-        val searchQuery: Query = query!!.orderByChild("firstName")
-            .startAt(queryText.toLowerCase())
-            .endAt(queryText.toLowerCase() + "\uf8ff")
-
-        val options = FirebaseRecyclerOptions.Builder<UserData>()
-            .setQuery(searchQuery, UserData::class.java)
-            .build()
-
-        adapter?.updateOptions(options)
+//        val searchView: SearchView = findViewById(R.id.candidate_search)
+//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+//            override fun onQueryTextSubmit(query: String?): Boolean {
+//                if (query != null) {
+//                    Log.i("test", "Search done onsubmit $query")
+//                    searchCandidates(query)
+//                }
+//                return true
+//            }
+//
+//            override fun onQueryTextChange(newText: String?): Boolean {
+//                if (newText != null) {
+//                    Log.i("test", "Search done onchange $newText")
+//                    searchCandidates(newText)
+//                }
+//                return true
+//            }
+//        })
+//    }
+//
+//    private fun searchCandidates(queryText: String) {
+//        val usersRef: DatabaseReference = FirebaseDatabase.getInstance().getReference("Users")
+//
+//        val query: Query = usersRef.orderByChild("firstName").startAt(queryText).endAt(queryText + "\uf8ff")
+//
+//        query.addListenerForSingleValueEvent(object : ValueEventListener {
+//            override fun onDataChange(dataSnapshot: DataSnapshot) {
+//                val userList: MutableList<UserData> = mutableListOf()
+//
+//                for (snapshot in dataSnapshot.children) {
+//                    val user = snapshot.getValue(UserData::class.java)
+//                    if (user != null) {
+//                        if (user.connections.isNotEmpty() && connectedUsersList.contains(user.userId)) {
+//                            userList.add(0, user) // Add connected users to the beginning of the list
+//                        } else {
+//                            userList.add(user)
+//                        }
+//                    }
+//                }
+//
+//                // Update the adapter with the sorted list
+//                userList.sortBy { it.firstName } // Sort by first name
+//                adapter?.updateUserList(userList)
+//            }
+//
+//            override fun onCancelled(databaseError: DatabaseError) {
+//                Log.e("CandidateActivity", "Error fetching users: ${databaseError.message}")
+//            }
+//        })
     }
 
 
     override fun onStart() {
         super.onStart()
         adapter?.startListening()
-
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
-        navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
 
     override fun onStop() {
         super.onStop()
         adapter?.stopListening()
-    }
-
-    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when (item.itemId) {
-            R.id.navigation_home -> {
-                startActivity(Intent(this@CandidateActivity, MainActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                })
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_connections -> {
-                // No need to start the same activity again
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_profile -> {
-                startActivity(Intent(this@CandidateActivity, DetailActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                })
-                return@OnNavigationItemSelectedListener true
-            }
-        }
-        false
     }
 }

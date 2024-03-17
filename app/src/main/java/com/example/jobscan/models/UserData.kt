@@ -16,7 +16,7 @@ data class UserData(
     var designation: String = "",
     var educationQualification: String = "",
 
-    var connections: List<String> = listOf(),
+    var connections: HashMap<String,String> = HashMap<String,String>(),
     var postIds: List<String> = listOf(),
     var connectionCount: Int=0
 ){}
