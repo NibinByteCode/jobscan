@@ -11,6 +11,7 @@ import com.example.jobscan.helpers.BottomNavigationHandler
 import com.example.jobscan.models.UserData
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -32,7 +33,7 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
         supportActionBar?.apply {
-            title = "Profile"
+            title = "Candidate Detail"
         }
         bottomNavigationView = findViewById(R.id.nav_view) // Correct initialization
         bottomNavigationHandler = BottomNavigationHandler(this)
@@ -64,7 +65,6 @@ class DetailActivity : AppCompatActivity() {
                     userData?.let {
                         // Set user details to views
                         userNameTextView.text = "${it.firstName} ${it.lastName}"
-//                        userIdTextView.text = it.userId
                         userTypeTextView.text = it.userType
                         userEmailTextView.text = it.email
                         userContactTextView.text = it.phoneNumber
@@ -106,6 +106,20 @@ class DetailActivity : AppCompatActivity() {
         connectButton = findViewById(R.id.connectbtn)
         connectionsRef = FirebaseDatabase.getInstance().reference.child("Connections")
         usersRef = FirebaseDatabase.getInstance().reference.child("Users")
+        databaseRef.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val userData = snapshot.getValue(UserData::class.java)
+                    userData?.let {
+                        userConnectionCountTextView.text = it.connectionCount.toString() + " Connections"
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
 
         checkIfConnected()
 
@@ -116,7 +130,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun checkIfConnected() {
-        connectionsRef.child(currentUserID).addValueEventListener(object : ValueEventListener {
+        usersRef.child(currentUserID).child("connections").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists() && snapshot.hasChild(userId)) {
                     // Users are connected, change button color or text as needed
@@ -138,39 +152,29 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun connectUsers() {
-        val connectionMap = HashMap<String, Any>()
-        connectionMap["$currentUserID/$userId"] = true
-        connectionMap["$userId/$currentUserID"] = true
+        val connectionCurrentMap = HashMap<String, Any>()
+        connectionCurrentMap["$userId"] = ""
+        val connectionCandidateMap = HashMap<String, Any>()
+        connectionCandidateMap["$currentUserID"] = ""
 
-        connectionsRef.updateChildren(connectionMap)
+        usersRef.child(currentUserID).child("connections").updateChildren(connectionCurrentMap)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     // Update connection count for both users
-                    usersRef.child(currentUserID).child("connectionCount").addListenerForSingleValueEvent(object :
-                        ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            var count = snapshot.getValue(Int::class.java) ?: 0
-                            count++
-                            usersRef.child(currentUserID).child("connectionCount").setValue(count)
-                        }
+                    usersRef.child(currentUserID).child("connectionCount")
+                        .addListenerForSingleValueEvent(object :
+                            ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                var count = snapshot.getValue(Int::class.java) ?: 0
+                                count++
+                                usersRef.child(currentUserID).child("connectionCount")
+                                    .setValue(count)
+                            }
 
-                        override fun onCancelled(error: DatabaseError) {
-                            // Handle database error
-                        }
-                    })
-
-                    usersRef.child(userId).child("connectionCount").addListenerForSingleValueEvent(object :
-                        ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            var count = snapshot.getValue(Int::class.java) ?: 0
-                            count++
-                            usersRef.child(userId).child("connectionCount").setValue(count)
-                        }
-
-                        override fun onCancelled(error: DatabaseError) {
-                            // Handle database error
-                        }
-                    })
+                            override fun onCancelled(error: DatabaseError) {
+                                // Handle database error
+                            }
+                        })
 
                     // Update UI after successful connection
                     connectButton.setBackgroundColor(resources.getColor(R.color.green))
@@ -180,8 +184,26 @@ class DetailActivity : AppCompatActivity() {
                     // Handle connection error
                 }
             }
-    }
+        usersRef.child(userId).child("connections").updateChildren(connectionCandidateMap)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    usersRef.child(userId).child("connectionCount")
+                        .addListenerForSingleValueEvent(object :
+                            ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                var count = snapshot.getValue(Int::class.java) ?: 0
+                                count++
+                                usersRef.child(userId).child("connectionCount").setValue(count)
 
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                                // Handle database error
+                            }
+                        })
+                }
+            }
+    }
     private fun navigateToCandidateActivity() {
         val candidate = Intent(this, CandidateActivity::class.java)
         startActivity(candidate)
