@@ -20,6 +20,9 @@ class SignUpActivity : AppCompatActivity() {
 
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.apply {
+            title = "Sign Up"
+        }
         val text = findViewById<TextView>(R.id.textView2)
         firebaseAuth = FirebaseAuth.getInstance()
         text.setOnClickListener {
