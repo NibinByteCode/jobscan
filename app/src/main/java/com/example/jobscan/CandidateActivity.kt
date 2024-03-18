@@ -1,7 +1,10 @@
 package com.example.jobscan
 
 import android.os.Bundle
+import android.util.Log
+import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
+
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jobscan.adapters.CandidateAdapter
@@ -35,7 +38,6 @@ class CandidateActivity : AppCompatActivity() {
         }
         bottomNavigationHandler.selectBottomNavigationItem(bottomNavigationView, R.id.navigation_connections)
 
-
         //Fetching the current user id
         val currentUserID = FirebaseAuth.getInstance().currentUser?.uid ?: ""
         query = FirebaseDatabase.getInstance().reference.child("Users")
@@ -49,56 +51,35 @@ class CandidateActivity : AppCompatActivity() {
         rView.adapter = adapter
 
 
-//        val searchView: SearchView = findViewById(R.id.candidate_search)
-//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-//            override fun onQueryTextSubmit(query: String?): Boolean {
-//                if (query != null) {
-//                    Log.i("test", "Search done onsubmit $query")
-//                    searchCandidates(query)
-//                }
-//                return true
-//            }
-//
-//            override fun onQueryTextChange(newText: String?): Boolean {
-//                if (newText != null) {
-//                    Log.i("test", "Search done onchange $newText")
-//                    searchCandidates(newText)
-//                }
-//                return true
-//            }
-//        })
-//    }
-//
-//    private fun searchCandidates(queryText: String) {
-//        val usersRef: DatabaseReference = FirebaseDatabase.getInstance().getReference("Users")
-//
-//        val query: Query = usersRef.orderByChild("firstName").startAt(queryText).endAt(queryText + "\uf8ff")
-//
-//        query.addListenerForSingleValueEvent(object : ValueEventListener {
-//            override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                val userList: MutableList<UserData> = mutableListOf()
-//
-//                for (snapshot in dataSnapshot.children) {
-//                    val user = snapshot.getValue(UserData::class.java)
-//                    if (user != null) {
-//                        if (user.connections.isNotEmpty() && connectedUsersList.contains(user.userId)) {
-//                            userList.add(0, user) // Add connected users to the beginning of the list
-//                        } else {
-//                            userList.add(user)
-//                        }
-//                    }
-//                }
-//
-//                // Update the adapter with the sorted list
-//                userList.sortBy { it.firstName } // Sort by first name
-//                adapter?.updateUserList(userList)
-//            }
-//
-//            override fun onCancelled(databaseError: DatabaseError) {
-//                Log.e("CandidateActivity", "Error fetching users: ${databaseError.message}")
-//            }
-//        })
-    }
+        val searchView: SearchView = findViewById(R.id.candidate_search)
+       searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null) {
+                    Log.i("test", "Search done onsubmit $query")
+
+                }
+                return true
+            }
+
+           override fun onQueryTextChange(newText: String?): Boolean {
+               // Filter the RecyclerView based on the entered text
+               if (newText != null) {
+                   val searchQuery = newText.trim()
+                   val firebaseSearchQuery = (query as DatabaseReference).orderByChild("firstName")
+                       .startAt(searchQuery)
+                       .endAt(searchQuery + "\uf8ff") // \uf8ff is a Unicode character that allows querying all values starting with the specified prefix
+                   val options = FirebaseRecyclerOptions.Builder<UserData>()
+                       .setQuery(firebaseSearchQuery, UserData::class.java)
+                       .build()
+                   adapter?.updateOptions(options)
+                   adapter?.notifyDataSetChanged()
+               }
+               return true
+            }
+        })
+   }
+
+
 
 
     override fun onStart() {
