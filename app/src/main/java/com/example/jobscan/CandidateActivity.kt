@@ -32,8 +32,8 @@ class CandidateActivity : AppCompatActivity() {
         }
         bottomNavigationHandler.selectBottomNavigationItem(bottomNavigationView, R.id.navigation_connections)
 
-        // Assuming you have initialized FirebaseAuth elsewhere in your app
-        val currentUserID = FirebaseAuth.getInstance().currentUser?.uid ?: "4TwcxghIRwXHomxeHtlw30nUa2K2"
+
+        val currentUserID = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
 
         query = FirebaseDatabase.getInstance().reference.child("Users")

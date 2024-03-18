@@ -50,15 +50,6 @@
             android:inputType="textPassword"
             android:layout_marginTop="16dp"
             />
-        <TextView
-            android:id="@+id/tforgot"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="20dp"
-            android:text="Forgot Password ?"
-            android:layout_marginTop="10dp"/>
         <Button
             android:id="@+id/button2"
             android:layout_width="match_parent"
