@@ -36,10 +36,13 @@ class CandidateActivity : AppCompatActivity() {
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             bottomNavigationHandler.onNavigationItemSelected(item.itemId)
         }
-        bottomNavigationHandler.selectBottomNavigationItem(bottomNavigationView, R.id.navigation_connections)
+        bottomNavigationHandler.selectBottomNavigationItem(
+            bottomNavigationView,
+            R.id.navigation_connections
+        )
 
         //Fetching the current user id
-        val currentUserID = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        //val currentUserID = FirebaseAuth.getInstance().currentUser?.uid ?: ""
         query = FirebaseDatabase.getInstance().reference.child("Users")
         val options = FirebaseRecyclerOptions.Builder<UserData>()
             .setQuery(query!!, UserData::class.java)
@@ -52,7 +55,7 @@ class CandidateActivity : AppCompatActivity() {
 
 
         val searchView: SearchView = findViewById(R.id.candidate_search)
-       searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null) {
                     Log.i("test", "Search done onsubmit $query")
@@ -61,25 +64,37 @@ class CandidateActivity : AppCompatActivity() {
                 return true
             }
 
-           override fun onQueryTextChange(newText: String?): Boolean {
-               // Filter the RecyclerView based on the entered text
-               if (newText != null) {
-                   val searchQuery = newText.trim()
-                   val firebaseSearchQuery = (query as DatabaseReference).orderByChild("firstName")
-                       .startAt(searchQuery)
-                       .endAt(searchQuery + "\uf8ff") // \uf8ff is a Unicode character that allows querying all values starting with the specified prefix
-                   val options = FirebaseRecyclerOptions.Builder<UserData>()
-                       .setQuery(firebaseSearchQuery, UserData::class.java)
-                       .build()
-                   adapter?.updateOptions(options)
-                   adapter?.notifyDataSetChanged()
-               }
-               return true
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText != null) {
+                    val searchQuery = newText.trim()
+                    if (searchQuery.isNotEmpty()) {
+                        val formattedSearchQuery =
+                            searchQuery.substring(0, 1).toUpperCase() + searchQuery.substring(1)
+                                .toLowerCase()
+                        val firebaseSearchQuery = (query as DatabaseReference).orderByChild("firstName")
+                            .startAt(formattedSearchQuery)
+                            .endAt(formattedSearchQuery + "\uf8ff")
+                        val options = FirebaseRecyclerOptions.Builder<UserData>()
+                            .setQuery(firebaseSearchQuery, UserData::class.java)
+                            .build()
+                        adapter?.updateOptions(options)
+                        adapter?.notifyDataSetChanged()
+                    } else {
+                        // If search query is empty, show all users
+                        val firebaseQuery = (query as DatabaseReference).orderByChild("firstName")
+                        val options = FirebaseRecyclerOptions.Builder<UserData>()
+                            .setQuery(firebaseQuery, UserData::class.java)
+                            .build()
+                        adapter?.updateOptions(options)
+                        adapter?.notifyDataSetChanged()
+                    }
+                }
+                return true
             }
+
+
         })
-   }
-
-
+    }
 
 
     override fun onStart() {

@@ -38,18 +38,14 @@
         <activity
             android:name=".LoginActivity"
             android:exported="false" />
-        <activity
-            android:name=".PostActivity"
-            android:exported="false" />
+
         <activity
             android:name=".DetailActivity"
             android:exported="false" />
         <activity
             android:name=".CandidateActivity"
             android:exported="false" />
-        <activity
-            android:name=".IntroActivity"
-            android:exported="false" />
+
     </application>
 
 </manifest>

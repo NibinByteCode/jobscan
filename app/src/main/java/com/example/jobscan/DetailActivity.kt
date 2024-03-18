@@ -1,7 +1,7 @@
 package com.example.jobscan
+
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -11,7 +11,6 @@ import com.example.jobscan.helpers.BottomNavigationHandler
 import com.example.jobscan.models.UserData
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -72,21 +71,23 @@ class DetailActivity : AppCompatActivity() {
                         userDesignationTextView.text = it.designation
                         userDOBTextView.text = it.dateOfBirth
                         userEducationTextView.text = it.educationQualification
-                        userConnectionCountTextView.text = it.connectionCount.toString() + " Connections"
+                        userConnectionCountTextView.text =
+                            it.connectionCount.toString() + " Connections"
                         Glide.with(this@DetailActivity)
                             .load(it.profileImage) // Replace userImgUrl with the actual URL of the image
                             .placeholder(R.drawable.logo_user) // Optional placeholder image
                             .error(R.drawable.logo_user) // Optional error image
                             .into(userImgImageView)
                         // Load the image using Glide
-                        if(it.profileImage.isEmpty()){
+                        if (it.profileImage.isEmpty()) {
                             Glide.with(this@DetailActivity)
                                 .load(R.drawable.logo_user)
                                 .placeholder(R.drawable.logo_user) // Optional placeholder image
                                 .error(R.drawable.logo_user) // Optional error image
                                 .into(userImgImageView)
-                        }else {
-                            val storageRef: StorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(it.profileImage)
+                        } else {
+                            val storageRef: StorageReference =
+                                FirebaseStorage.getInstance().getReferenceFromUrl(it.profileImage)
                             Glide.with(this@DetailActivity)
                                 .load(storageRef)
                                 .placeholder(R.drawable.logo_user) // Optional placeholder image
@@ -106,12 +107,13 @@ class DetailActivity : AppCompatActivity() {
         connectButton = findViewById(R.id.connectbtn)
         connectionsRef = FirebaseDatabase.getInstance().reference.child("Connections")
         usersRef = FirebaseDatabase.getInstance().reference.child("Users")
-        databaseRef.addValueEventListener(object : ValueEventListener{
+        databaseRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     val userData = snapshot.getValue(UserData::class.java)
                     userData?.let {
-                        userConnectionCountTextView.text = it.connectionCount.toString() + " Connections"
+                        userConnectionCountTextView.text =
+                            it.connectionCount.toString() + " Connections"
                     }
                 }
             }
@@ -130,25 +132,26 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun checkIfConnected() {
-        usersRef.child(currentUserID).child("connections").addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists() && snapshot.hasChild(userId)) {
-                    // Users are connected, change button color or text as needed
-                    connectButton.setBackgroundColor(resources.getColor(R.color.green))
-                    connectButton.text = "Connected"
-                    connectButton.isEnabled = false // Disable button
-                } else {
-                    // Users are not connected
+        usersRef.child(currentUserID).child("connections")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists() && snapshot.hasChild(userId)) {
+                        // Users are connected, change button color or text as needed
+                        connectButton.setBackgroundColor(resources.getColor(R.color.green))
+                        connectButton.text = "Connected"
+                        connectButton.isEnabled = false // Disable button
+                    } else {
+                        // Users are not connected
 //                    connectButton.setBackgroundColor(resources.getColor(R.color.green))
-                    connectButton.text = "Connect"
-                    connectButton.isEnabled = true // Enable button
+                        connectButton.text = "Connect"
+                        connectButton.isEnabled = true // Enable button
+                    }
                 }
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                // Handle database error
-            }
-        })
+                override fun onCancelled(error: DatabaseError) {
+                    // Handle database error
+                }
+            })
     }
 
     private fun connectUsers() {
@@ -204,6 +207,7 @@ class DetailActivity : AppCompatActivity() {
                 }
             }
     }
+
     private fun navigateToCandidateActivity() {
         val candidate = Intent(this, CandidateActivity::class.java)
         startActivity(candidate)

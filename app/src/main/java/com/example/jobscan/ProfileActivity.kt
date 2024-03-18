@@ -45,13 +45,13 @@ class ProfileActivity : AppCompatActivity() {
                         val userContact = snapshot.child("phoneNumber").getValue(String::class.java)
                         val userImg = snapshot.child("profileImage").getValue(String::class.java)
                         val userCompany = snapshot.child("companyName").getValue(String::class.java)
-                        val educationQualification = snapshot.child("educationQualification").getValue(String::class.java)
+                        val educationQualification =
+                            snapshot.child("educationQualification").getValue(String::class.java)
                         val designation = snapshot.child("designation").getValue(String::class.java)
                         val userType = snapshot.child("userType").getValue(String::class.java)
-                        val connectionCount = snapshot.child("connectionCount").getValue(Int::class.java)
+                        val connectionCount =
+                            snapshot.child("connectionCount").getValue(Int::class.java)
                         val dob = snapshot.child("dateOfBirth").getValue(String::class.java)
-
-
 //                        findViewById<TextView>(R.id.userName).text = "$firstName $lastName"
 //                        findViewById<TextView>(R.id.userEmail).text = userEmail
 //                        findViewById<TextView>(R.id.userContact).text = userContact
@@ -60,13 +60,16 @@ class ProfileActivity : AppCompatActivity() {
                         findViewById<TextView>(R.id.cand_phone_number).text = userContact
                         findViewById<TextView>(R.id.pr_designation).text = designation
                         findViewById<TextView>(R.id.pr_company).text = userCompany
-                        findViewById<TextView>(R.id.cand_connection_count).text = connectionCount.toString() + " Connections"
+                        findViewById<TextView>(R.id.cand_connection_count).text =
+                            connectionCount.toString() + " Connections"
                         findViewById<TextView>(R.id.pr_dob).text = dob
-                        findViewById<TextView>(R.id.pr_education_qualification).text = educationQualification
+                        findViewById<TextView>(R.id.pr_education_qualification).text =
+                            educationQualification
                         findViewById<TextView>(R.id.pr_user_type).text = userType
                         if (!userImg.isNullOrEmpty()) {
                             Log.i("test", "UserImage value $userImg")
-                            val storageReference: StorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(userImg)
+                            val storageReference: StorageReference =
+                                FirebaseStorage.getInstance().getReferenceFromUrl(userImg)
                             Glide.with(this@ProfileActivity)
                                 .load(storageReference)
                                 .into(findViewById(R.id.pr_profile_image))
@@ -124,6 +127,7 @@ class ProfileActivity : AppCompatActivity() {
                 }
             }
             false
-        }}
+        }
+}
 
 

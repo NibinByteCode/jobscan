@@ -7,23 +7,15 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.jobscan.helpers.BottomNavigationHandler
 import com.example.jobscan.models.PostData
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ServerValue
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 import java.util.UUID
 
 class CreatePost : AppCompatActivity() {
@@ -75,7 +67,7 @@ class CreatePost : AppCompatActivity() {
 
         // Upload image if available
         if (imageUri != null) {
-            val uniqueID = UUID.randomUUID().toString()+".jpg"
+            val uniqueID = UUID.randomUUID().toString() + ".jpg"
 
             val imageRef = storageRef.child("postImages/${uniqueID}")
             val uploadTask = imageRef.putFile(imageUri!!)
@@ -98,8 +90,7 @@ class CreatePost : AppCompatActivity() {
                         postDate = System.currentTimeMillis(),
                     )
                     val postId = firebaseDB.child("Posts").push().key
-                    postId?.let {
-                            generatedPostId ->
+                    postId?.let { generatedPostId ->
                         post.postId = generatedPostId
                         val postValues = post.toMap()
                         val childUpdates = HashMap<String, Any>()
@@ -121,12 +112,11 @@ class CreatePost : AppCompatActivity() {
                 postId = "",
                 postContent = content,
                 userId = FirebaseAuth.getInstance().currentUser?.uid.toString(), // Replace with actual user ID
-                postDate =System.currentTimeMillis(),
+                postDate = System.currentTimeMillis(),
             )
 
             val postId = firebaseDB.push().key
-            postId?.let {
-                    generatedPostId ->
+            postId?.let { generatedPostId ->
                 post.postId = generatedPostId
                 val postValues = post.toMap()
                 val childUpdates = HashMap<String, Any>()
@@ -149,6 +139,7 @@ class CreatePost : AppCompatActivity() {
         intent.action = Intent.ACTION_GET_CONTENT
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST)
     }
+
     private fun navigateToMainActivity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
