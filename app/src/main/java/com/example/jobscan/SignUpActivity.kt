@@ -47,12 +47,12 @@ class SignUpActivity : AppCompatActivity() {
             val educationQualification = binding.qualification?.text.toString()
             val phoneNumber = binding.phoneNumber.text.toString()
             val userType = when (binding.userTypeRadioGroup?.checkedRadioButtonId) {
-                R.id.userTypeUser -> "Candidate"
-                R.id.userTypeAdmin -> "Recruiter"
+                R.id.userTypeCandidate -> "Candidate"
+                R.id.userTypeRecruiter -> "Recruiter"
                 else -> ""
             }
             if (email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty() && firstName.isNotEmpty() && lastName.isNotEmpty() && phoneNumber.isNotEmpty()) {
-                if (!android.util.Patterns.PHONE.matcher(phoneNumber).matches()) {
+                if (!validPhoneNumber(phoneNumber)) {
                     // Phone number is not valid
                     Toast.makeText(this, "Phone number should have 10 digit", Toast.LENGTH_SHORT).show()
                 }
@@ -97,9 +97,14 @@ class SignUpActivity : AppCompatActivity() {
             }
 
         }
-    }private fun validEmail(email: String): Boolean {
+    }
+    private fun validEmail(email: String): Boolean {
         val emailPatterns = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})"
         return email.matches(emailPatterns.toRegex())
+    }
+    private fun validPhoneNumber(phone: String): Boolean {
+        val phonePatterns = "^\\d{10}\$"
+        return phone.matches(phonePatterns.toRegex())
     }
     private fun isValidDate(date: String): Boolean {
         val dateFormat = SimpleDateFormat("dd/mm/yyyy", Locale.getDefault())

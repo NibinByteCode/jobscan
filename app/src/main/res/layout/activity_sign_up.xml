@@ -176,20 +176,20 @@
             android:layout_marginTop="16dp">
 
             <RadioButton
-                android:id="@+id/userTypeUser"
+                android:id="@+id/userTypeCandidate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="User"
+                android:text="Candidate"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:padding="10dp"
                 android:checked="true"/>
 
             <RadioButton
-                android:id="@+id/userTypeAdmin"
+                android:id="@+id/userTypeRecruiter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Admin"
+                android:text="Recruiter"
                 android:textColor="@color/white"
                 android:padding="10dp"
                 android:textSize="16sp"/>
