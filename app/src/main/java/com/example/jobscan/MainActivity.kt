@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.SearchView
+import android.widget.Toast
 
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +18,10 @@ import com.example.jobscan.models.PostData
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class MainActivity : AppCompatActivity() {
     private var adapter: HomeRecyclerAdapter? = null
@@ -38,6 +42,17 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationHandler.selectBottomNavigationItem(bottomNavigationView, R.id.navigation_home)
         val rView: RecyclerView = findViewById(R.id.postRecycler)
         val searchView: SearchView = findViewById(R.id.searchView)
+        val query = FirebaseDatabase.getInstance().reference.child("Posts")
+        val options = FirebaseRecyclerOptions.Builder<PostData>()
+            .setQuery(query, PostData::class.java)
+            .build()
+        Log.i("data","getting data")
+        adapter = HomeRecyclerAdapter(this,options)
+        val mmLinearLayoutManager:LinearLayoutManager= LinearLayoutManager(this)
+        mmLinearLayoutManager.reverseLayout=true
+        mmLinearLayoutManager.setStackFromEnd(true)
+        rView.layoutManager = mmLinearLayoutManager
+        rView.adapter = adapter
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
@@ -46,19 +61,22 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                Log.i("test", "Search done")
+                val searchQuery = newText.trim() // Normalize the search query to lowercase
+                val firebaseQuery = FirebaseDatabase.getInstance().reference.child("Posts")
+                    .orderByChild("postContent")
+                    .startAt(searchQuery)
+                    .endAt("$searchQuery\uf8ff")
+
+                val options = FirebaseRecyclerOptions.Builder<PostData>()
+                    .setQuery(firebaseQuery, PostData::class.java)
+                    .build()
+                adapter?.updateOptions(options)
+                adapter?.notifyDataSetChanged()
                 return true
             }
 
+
         })
-        val query = FirebaseDatabase.getInstance().reference.child("Posts")
-        val options = FirebaseRecyclerOptions.Builder<PostData>()
-            .setQuery(query, PostData::class.java)
-            .build()
-        Log.i("data","getting data")
-        adapter = HomeRecyclerAdapter(options)
-        rView.layoutManager = LinearLayoutManager(this)
-        rView.adapter = adapter
 
         val createPostButton: FloatingActionButton = findViewById(R.id.addPost)
         createPostButton.setOnClickListener {
@@ -72,6 +90,10 @@ class MainActivity : AppCompatActivity() {
         adapter?.startListening()
     }
 
+    override fun onResume() {
+        super.onResume()
+        adapter?.notifyDataSetChanged()
+    }
     override fun onStop() {
         super.onStop()
         adapter?.stopListening()

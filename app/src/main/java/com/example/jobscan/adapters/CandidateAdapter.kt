@@ -25,11 +25,12 @@ import com.google.firebase.database.ValueEventListener
 class CandidateAdapter (private val context: Context, options: FirebaseRecyclerOptions<UserData>) :
     FirebaseRecyclerAdapter<UserData, CandidateAdapter.MyViewHolder>(options){
 
-    val currentUserID = FirebaseAuth.getInstance().currentUser?.uid ?: "4TwcxghIRwXHomxeHtlw30nUa2K2"
+    // Initializing Firebase variables
+    val currentUserID = FirebaseAuth.getInstance().currentUser?.uid ?: ""
     private val currentUserConnections: MutableSet<String> = mutableSetOf()
 
     init {
-        // Assuming currentUserID is initialized elsewhere in your code
+        // Fetching current user's connections once during initialization
         currentUserID?.let { userId ->
             FirebaseDatabase.getInstance().getReference("Users").child(userId)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -38,7 +39,7 @@ class CandidateAdapter (private val context: Context, options: FirebaseRecyclerO
                             val currentUserData = dataSnapshot.getValue(UserData::class.java)
                             currentUserData?.connections?.keys?.let { keys ->
                                 currentUserConnections.addAll(keys)
-                                notifyDataSetChanged() // Refresh adapter after fetching connections
+                                notifyDataSetChanged()
                             }
                         }
                     }
@@ -49,17 +50,20 @@ class CandidateAdapter (private val context: Context, options: FirebaseRecyclerO
                 })
         }
     }
+
+    // Inflate layout for each item in the RecyclerView
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return MyViewHolder(inflater, parent)
     }
 
+    // Bind data to ViewHolder
     override fun onBindViewHolder(holder: MyViewHolder, position: Int, model: UserData) {
+        // Load profile image using Glide
         if (model.profileImage.isNotEmpty()) {
             val storRef: StorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(model.profileImage)
             Glide.with(holder.profileImage.context).load(storRef).into(holder.profileImage)
         } else {
-            // Set a placeholder image or handle the empty case as needed
             holder.profileImage.setImageResource(R.drawable.logo_user)
         }
 
@@ -79,6 +83,7 @@ class CandidateAdapter (private val context: Context, options: FirebaseRecyclerO
         }
     }
 
+    // ViewHolder class to hold references to views in each item layout
     class MyViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
         RecyclerView.ViewHolder(inflater.inflate(R.layout.activity_candidate_row, parent, false)) {
         val userName: TextView = itemView.findViewById(R.id.user_name)
