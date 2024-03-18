@@ -22,10 +22,13 @@ class CandidateActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_candidate)
+        //Setting the title of layout
         supportActionBar?.apply {
             title = "Connections"
         }
-        bottomNavigationView = findViewById(R.id.nav_view) // Correct initialization
+
+        //Bottom Navigation menu
+        bottomNavigationView = findViewById(R.id.nav_view)
         bottomNavigationHandler = BottomNavigationHandler(this)
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             bottomNavigationHandler.onNavigationItemSelected(item.itemId)
@@ -33,9 +36,8 @@ class CandidateActivity : AppCompatActivity() {
         bottomNavigationHandler.selectBottomNavigationItem(bottomNavigationView, R.id.navigation_connections)
 
 
+        //Fetching the current user id
         val currentUserID = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-
-
         query = FirebaseDatabase.getInstance().reference.child("Users")
         val options = FirebaseRecyclerOptions.Builder<UserData>()
             .setQuery(query!!, UserData::class.java)
