@@ -42,24 +42,6 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationHandler.selectBottomNavigationItem(bottomNavigationView, R.id.navigation_home)
         val rView: RecyclerView = findViewById(R.id.postRecycler)
         val searchView: SearchView = findViewById(R.id.searchView)
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                Log.i("test", "Search done")
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String): Boolean {
-                val firebaseQuery = FirebaseDatabase.getInstance().reference.child("Posts")
-                    .orderByChild("postContent").startAt(newText).endAt("$newText\uf8ff")
-                val options = FirebaseRecyclerOptions.Builder<PostData>()
-                    .setQuery(firebaseQuery, PostData::class.java)
-                    .build()
-                adapter?.updateOptions(options)
-                return true
-            }
-
-        })
         val query = FirebaseDatabase.getInstance().reference.child("Posts")
         val options = FirebaseRecyclerOptions.Builder<PostData>()
             .setQuery(query, PostData::class.java)
@@ -71,6 +53,31 @@ class MainActivity : AppCompatActivity() {
         mmLinearLayoutManager.setStackFromEnd(true)
         rView.layoutManager = mmLinearLayoutManager
         rView.adapter = adapter
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                Log.i("test", "Search done")
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                val searchQuery = newText.trim() // Normalize the search query to lowercase
+                val firebaseQuery = FirebaseDatabase.getInstance().reference.child("Posts")
+                    .orderByChild("postContent")
+                    .startAt(searchQuery)
+                    .endAt("$searchQuery\uf8ff")
+
+                val options = FirebaseRecyclerOptions.Builder<PostData>()
+                    .setQuery(firebaseQuery, PostData::class.java)
+                    .build()
+                adapter?.updateOptions(options)
+                adapter?.notifyDataSetChanged()
+                return true
+            }
+
+
+        })
+
 
     }
 
