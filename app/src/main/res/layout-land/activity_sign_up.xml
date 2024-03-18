@@ -33,7 +33,7 @@
             android:background="@drawable/rounndinput"
             android:hint="First Name"
             android:inputType="text"
-            android:padding="18dp"
+            android:padding="15dp"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
             android:textSize="20sp"
@@ -47,7 +47,7 @@
             android:textColorHint="@color/white"
             android:textSize="20sp"
             android:background="@drawable/rounndinput"
-            android:padding="18dp"
+            android:padding="15dp"
             android:inputType="text"
             android:layout_marginTop="16dp"
             />
@@ -60,7 +60,7 @@
             android:textColorHint="@color/white"
             android:textSize="20sp"
             android:background="@drawable/rounndinput"
-            android:padding="18dp"
+            android:padding="15dp"
             android:inputType="text"
             android:layout_marginTop="16dp"
             tools:ignore="TextFields" />
@@ -73,7 +73,7 @@
             android:textColorHint="@color/white"
             android:textSize="20sp"
             android:background="@drawable/rounndinput"
-            android:padding="18dp"
+            android:padding="15dp"
             android:inputType="textPassword"
             android:layout_marginTop="16dp"
             />
@@ -86,7 +86,7 @@
             android:textColorHint="@color/white"
             android:textSize="20sp"
             android:background="@drawable/rounndinput"
-            android:padding="18dp"
+            android:padding="15dp"
             android:inputType="textPassword"
             android:layout_marginTop="16dp"
             />
@@ -99,10 +99,74 @@
             android:textColorHint="@color/white"
             android:textSize="20sp"
             android:background="@drawable/rounndinput"
-            android:padding="18dp"
+            android:padding="15dp"
             android:inputType="text"
             android:layout_marginTop="16dp"
             />
+        <EditText
+            android:id="@+id/dateOfBirth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Date Of Birth"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textSize="20sp"
+            android:background="@drawable/rounndinput"
+            android:padding="15dp"
+            android:inputType="text"
+            android:layout_marginTop="16dp"
+            />
+        <EditText
+            android:id="@+id/companyName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Company Name"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textSize="20sp"
+            android:background="@drawable/rounndinput"
+            android:padding="15dp"
+            android:inputType="text"
+            android:layout_marginTop="16dp"
+            />
+        <EditText
+            android:id="@+id/designation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Designation"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textSize="20sp"
+            android:background="@drawable/rounndinput"
+            android:padding="15dp"
+            android:inputType="text"
+            android:layout_marginTop="16dp"
+            />
+        <EditText
+            android:id="@+id/qualification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Education"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textSize="20sp"
+            android:background="@drawable/rounndinput"
+            android:padding="15dp"
+            android:inputType="text"
+            android:layout_marginTop="16dp"
+            />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="User Type"
+            android:paddingLeft="10dp"
+            android:layout_marginBottom="0dp"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
+
         <RadioGroup
             android:id="@+id/userTypeRadioGroup"
             android:layout_width="match_parent"
@@ -114,7 +178,7 @@
                 android:id="@+id/userTypeCandidate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/candidate"
+                android:text="Candidate"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:padding="10dp"
@@ -124,11 +188,12 @@
                 android:id="@+id/userTypeRecruiter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/recruiter"
+                android:text="Recruiter"
                 android:textColor="@color/white"
                 android:padding="10dp"
                 android:textSize="16sp"/>
         </RadioGroup>
+
 
         <Button
             android:id="@+id/button"
