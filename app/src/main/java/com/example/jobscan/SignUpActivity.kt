@@ -54,19 +54,24 @@ class SignUpActivity : AppCompatActivity() {
             if (email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty() && firstName.isNotEmpty() && lastName.isNotEmpty() && phoneNumber.isNotEmpty()) {
                 if (!android.util.Patterns.PHONE.matcher(phoneNumber).matches()) {
                     // Phone number is not valid
-                    Toast.makeText(this, "Invalid phone number", Toast.LENGTH_SHORT).show()
-                } else if (!isValidDate(dateOfBirth)) {
-                    // Date of birth is not valid
-                    Toast.makeText(this, "Invalid date of birth", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Phone number should have 10 digit", Toast.LENGTH_SHORT).show()
                 }
-                if (password == confirmPassword) {
+                else if(!validEmail(email)){
+                    Toast.makeText(this, "Invalid email format", Toast.LENGTH_SHORT).show()
+
+                }
+                else if (!isValidDate(dateOfBirth)) {
+                    // Date of birth is not valid
+                    Toast.makeText(this, "Date Must Be in DD/MM/YYYY Format", Toast.LENGTH_SHORT).show()
+                }
+                else if (password == confirmPassword) {
                     firebaseAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener {
                             if (it.isSuccessful) {
                                 val userId = firebaseAuth.currentUser?.uid
 
                                 FirebaseDatabase.getInstance().getReference("Users").child(userId!!)
-                                    .setValue(UserData(firstName=firstName,lastName=lastName,email=email,phoneNumber=phoneNumber,userType=userType, companyName = companyName, designation = designation, educationQualification = educationQualification,userId=userId))
+                                    .setValue(UserData(firstName=firstName,lastName=lastName,email=email,phoneNumber=phoneNumber,userType=userType,dateOfBirth=dateOfBirth, companyName = companyName, designation = designation, educationQualification = educationQualification,userId=userId))
                                     .addOnSuccessListener {
 
                                         val intent = Intent(this, LoginActivity::class.java)
@@ -92,9 +97,12 @@ class SignUpActivity : AppCompatActivity() {
             }
 
         }
+    }private fun validEmail(email: String): Boolean {
+        val emailPatterns = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})"
+        return email.matches(emailPatterns.toRegex())
     }
     private fun isValidDate(date: String): Boolean {
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("dd/mm/yyyy", Locale.getDefault())
         dateFormat.isLenient = false
         return try {
             dateFormat.parse(date)
