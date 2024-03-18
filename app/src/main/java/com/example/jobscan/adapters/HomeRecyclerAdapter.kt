@@ -1,5 +1,7 @@
 package com.example.jobscan.adapters
 
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
+import com.example.jobscan.DetailActivity
 import com.example.jobscan.R
 import com.example.jobscan.models.PostData
 import com.example.jobscan.models.UserData
@@ -24,7 +27,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class HomeRecyclerAdapter(options: FirebaseRecyclerOptions<PostData>) :
+class HomeRecyclerAdapter(private val context: Context, options: FirebaseRecyclerOptions<PostData>) :
     FirebaseRecyclerAdapter<PostData, HomeRecyclerAdapter.MyViewHolder>(options) {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -91,6 +94,11 @@ override fun onBindViewHolder(
             val dateFormat = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault())
             val formattedDate = dateFormat.format(date)
             holder.postDate.text = formattedDate
+            holder.itemView.setOnClickListener {
+                val intent = Intent(context, DetailActivity::class.java)
+                intent.putExtra("userId", model.userId)
+                context.startActivity(intent)
+            }
         }
     }
    catch (error:Exception){

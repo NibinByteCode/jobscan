@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
             .setQuery(query, PostData::class.java)
             .build()
         Log.i("data","getting data")
-        adapter = HomeRecyclerAdapter(options)
+        adapter = HomeRecyclerAdapter(this,options)
         val mmLinearLayoutManager:LinearLayoutManager= LinearLayoutManager(this)
         mmLinearLayoutManager.reverseLayout=true
         mmLinearLayoutManager.setStackFromEnd(true)
@@ -78,7 +78,11 @@ class MainActivity : AppCompatActivity() {
 
         })
 
-
+        val createPostButton: FloatingActionButton = findViewById(R.id.addPost)
+        createPostButton.setOnClickListener {
+            val intent = Intent(this, CreatePost::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onStart() {
@@ -86,6 +90,10 @@ class MainActivity : AppCompatActivity() {
         adapter?.startListening()
     }
 
+    override fun onResume() {
+        super.onResume()
+        adapter?.notifyDataSetChanged()
+    }
     override fun onStop() {
         super.onStop()
         adapter?.stopListening()
