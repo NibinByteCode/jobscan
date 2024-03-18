@@ -17,20 +17,22 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ServerValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.UUID
 
 class CreatePost : AppCompatActivity() {
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var bottomNavigationHandler: BottomNavigationHandler
-
     private lateinit var imageView: ImageView
     private lateinit var editTextContent: EditText
     private lateinit var buttonChooseImage: Button
     private lateinit var buttonPost: Button
-
     private var imageUri: Uri? = null
     private lateinit var storageRef: StorageReference
     private lateinit var firebaseDB: DatabaseReference
@@ -63,6 +65,7 @@ class CreatePost : AppCompatActivity() {
     }
 
     private fun uploadPost() {
+
         val content = editTextContent.text.toString().trim()
 
         if (content.isEmpty()) {
@@ -92,8 +95,7 @@ class CreatePost : AppCompatActivity() {
                         postContent = content,
                         postImage = downloadUri.toString(),
                         userId = FirebaseAuth.getInstance().currentUser?.uid.toString(),
-                        likeCount = 0,
-                        dislikeCount = 0
+                        postDate = System.currentTimeMillis(),
                     )
                     val postId = firebaseDB.child("Posts").push().key
                     postId?.let {
@@ -119,8 +121,7 @@ class CreatePost : AppCompatActivity() {
                 postId = "",
                 postContent = content,
                 userId = FirebaseAuth.getInstance().currentUser?.uid.toString(), // Replace with actual user ID
-                likeCount = 0,
-                dislikeCount = 0
+                postDate =System.currentTimeMillis(),
             )
 
             val postId = firebaseDB.push().key

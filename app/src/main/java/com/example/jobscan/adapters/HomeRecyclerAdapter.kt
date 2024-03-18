@@ -20,6 +20,9 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class HomeRecyclerAdapter(options: FirebaseRecyclerOptions<PostData>) :
     FirebaseRecyclerAdapter<PostData, HomeRecyclerAdapter.MyViewHolder>(options) {
@@ -29,6 +32,7 @@ class HomeRecyclerAdapter(options: FirebaseRecyclerOptions<PostData>) :
         val userName: TextView = itemView.findViewById(R.id.textViewUserName)
         val postImage: ImageView = itemView.findViewById(R.id.imageViewPostImage)
         val postContent: TextView = itemView.findViewById(R.id.textViewPostContent)
+        val postDate: TextView = itemView.findViewById(R.id.textViewPostdate)
     }
 
     override fun onCreateViewHolder(
@@ -45,53 +49,82 @@ override fun onBindViewHolder(
     position: Int,
     model: PostData
 ) {
-    holder.userName.text = ""
-    holder.postContent.text = ""
+    try {
+        if(model!=null) {
+            holder.userName.text = ""
+            holder.postContent.text = ""
+            getUserData(model.userId) { userDetail ->
+                Log.i("userData", model.userId.toString())
+                if (userDetail != null) {
+                    Log.i("userData", "User data retrieved successfully: $userDetail")
+                    val storageReference =
+                        FirebaseStorage.getInstance().getReferenceFromUrl(userDetail.profileImage)
+                    storageReference.downloadUrl.addOnSuccessListener { uri ->
+                        // Load the image using Glide with the generated download URL
+                        Glide.with(holder.userprofileImage.context)
+                            .load(uri)
+                            .apply(RequestOptions().transform(CircleCrop()))
+                            .error(R.drawable.logo_user) // Set error placeholder image
+                            .into(holder.userprofileImage)
+                    }.addOnFailureListener { exception ->
+                        Log.e("Glide", "Failed to generate download URL: ${exception.message}")
 
-    getUserData(model.userId) { userDetail ->
-        Log.i("userData", model.userId.toString())
-        if (userDetail != null) {
-            Log.i("userData", "User data retrieved successfully: $userDetail")
-            val storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(userDetail.profileImage)
-            storageReference.downloadUrl.addOnSuccessListener { uri ->
-                // Load the image using Glide with the generated download URL
-                Glide.with(holder.userprofileImage.context)
-                    .load(uri)
-                    .apply(RequestOptions().transform(CircleCrop()))
-                    .error(R.drawable.logo_user) // Set error placeholder image
-                    .into(holder.userprofileImage)
-            }.addOnFailureListener { exception ->
-                Log.e("Glide", "Failed to generate download URL: ${exception.message}")
+                    }
+
+                    holder.userName.text = "${userDetail.firstName} ${userDetail.lastName}"
+                } else {
+                    Log.e("userData", "Failed to retrieve user data for user ID: ${model.userId}")
+                }
             }
 
-            holder.userName.text = "${userDetail.firstName} ${userDetail.lastName}"
-        } else {
-            Log.e("userData", "Failed to retrieve user data for user ID: ${model.userId}")
+            if (model.postImage == null) {
+                holder.postImage.visibility = View.GONE // or View.INVISIBLE
+            } else {
+                Glide.with(holder.postImage.context)
+                    .load(model.postImage)
+                    .error(R.drawable.logo_user) // Set error placeholder image
+                    .into(holder.postImage)
+            }
+            holder.postContent.text = model.postContent
+            val timestamp = model.postDate // Your timestamp
+            val date = Date(timestamp)
+            val dateFormat = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault())
+            val formattedDate = dateFormat.format(date)
+            holder.postDate.text = formattedDate
         }
     }
+   catch (error:Exception){
+       Log.i("Error_Nibin",error.toString())
 
-    Glide.with(holder.postImage.context)
-        .load(model.postImage)
-        .error(R.drawable.logo_user) // Set error placeholder image
-        .into(holder.postImage)
-    holder.postContent.text = model.postContent
+   }
 }
 
 
-    private fun getUserData(userId: String, callback: (UserData) -> Unit) {
+    private fun getUserData(userId: String, callback: (UserData?) -> Unit) {
         val reference = FirebaseDatabase.getInstance().getReference("Users")
         val userQuery = reference.orderByChild("userId").equalTo(userId)
         userQuery.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val userData = dataSnapshot.children.first().getValue(UserData::class.java)
-                val postUserData = userData ?: UserData("Deleted", "User")
-                println("User Data Retrieved: $postUserData")
-                callback(postUserData)
+                if (dataSnapshot.exists()) {
+                    dataSnapshot.children.firstOrNull()?.getValue(UserData::class.java)?.let { userData ->
+                        println("User Data Retrieved: $userData")
+                        callback(userData)
+                    } ?: run {
+                        // Handle case where desired child does not exist
+                        println("User Data for user ID $userId does not exist")
+                        callback(null)
+                    }
+                } else {
+                    // Handle case where dataSnapshot does not contain any children
+                    println("No user data found for user ID: $userId")
+                    callback(null)
+                }
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                // Handle errors
+                // Handle database error
                 println("Database Error: ${databaseError.message}")
+                callback(null)
             }
         })
     }
