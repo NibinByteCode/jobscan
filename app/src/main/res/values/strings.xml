@@ -33,4 +33,5 @@
     <string name="candidate">Candidate</string>
     <string name="recruiter">Recruiter</string>
     <string name="Post_date">Post Creation Date</string>
+    <string name="logo">logo</string>
 </resources>
