@@ -9,8 +9,11 @@ Professor Name: **Nicolas Blier**
 
 Group Members:
 **Nandipati Vamsi - 8922647
+
 Justin Janson – 8868914
+
 Sandeep Kaur – 8899764
+
 Nibin Moideenkutty – 8890966**
 
 Github link: https://github.com/NibinByteCode/jobscan
