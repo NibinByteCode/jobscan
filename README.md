@@ -35,5 +35,7 @@ Every Page has some unique functionalities that make this application effective 
 
 Extra Features: 
 •	This application also has some extra features such as bottom navigation bar that makes it user-friendly. Users can easily go to any application page with this navigation feature. This nav bar has three icons for navigating to Home, Connections, and Profile page. Another feature is in the home page, post creation search bar. 
+
 •	On the home page, the users have ability to view the profile of the other user who has posted the post by clicking on the profile/name on it.
+
 •	All the pages are responsive and can be viewed in both portrait, landscape and tablet view.
